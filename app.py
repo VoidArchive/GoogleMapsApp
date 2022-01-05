@@ -1,11 +1,12 @@
 import time
 import api
 import googlemaps
-from flask import Flask, render_template, redirect, url_for, jsonify
+from flask import Flask, render_template,redirect, url_for, jsonify,request
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+
 
 
 # Using google api to search
@@ -43,9 +44,10 @@ def search_google(search_string, radius):
     return response_list
 
 
-@app.route('/')
+@app.route('/',methods=['GET','POST'])
 def home():
-    return render_template('index.html')
+    
+    return(render_template('index.html'))
 
 
 if __name__=="__main__":
