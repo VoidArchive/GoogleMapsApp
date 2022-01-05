@@ -24,7 +24,7 @@
 
             <form action="{{url_for('home')}}" , method="POST">
                 <div class="form-group">
-                    <input type="text" class="form-control" name="search" placeholder="keyword" value="restaurants">
+                    <input type="text" class="form-control" name="search" placeholder="keyword">
                     <input type="number" class="form-control" name="distance" placeholder="In meter" id="distance"
                         value="500">
                     <button type="submit" class="btn btn-dark">Search</button>
@@ -42,6 +42,9 @@
                 </tr>
             </thead>
             <tbody>
+                {%if data_list == []:%}
+                ,<p>Database empty!</p>
+                {%else:%}
                 {%for item in data_list:%}
                 <tr>
                     <td>{{item.name}}</td>
@@ -50,6 +53,7 @@
 
                 </tr>
                 {%endfor%}
+                {%endif%}
             </tbody>
         </table>
 
