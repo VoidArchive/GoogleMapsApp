@@ -94,7 +94,7 @@ def api_request():
     if places:
         return jsonify(places.to_dict())
     else:
-        return jsonify({'fail':'fail'})
+        return jsonify(error={'Not found':'Database is empty'})
 
 
 if __name__ == "__main__":
