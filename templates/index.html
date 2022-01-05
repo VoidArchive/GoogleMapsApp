@@ -20,9 +20,10 @@
             <h1 class="display-4">🔎Search things Near You 🔍</h1>
             <p class="lead">Look up things that are near you</p>
 
-            <form action="", method="post">
+            <form action="{{url_for('home')}}", method="POST">
                 <div class="form-group">
                     <input type="text" class="form-control" name="search" placeholder="keyword">
+                    <input type="number" class="form-control" name="distance" placeholder="In meter" id="distance">
                     <button type="button" class="btn btn-dark">Search</button>
                 </div>
             </form>

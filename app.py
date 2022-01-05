@@ -1,13 +1,26 @@
 import time
+
+from werkzeug.wrappers import response
 import api
 import googlemaps
-from flask import Flask, render_template,redirect, url_for, jsonify,request
+from flask import Flask, render_template, redirect, url_for, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///search_list.db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 
+# Create database 
+class Search(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(250), nullable=False)
+    address = db.Column(db.String(250), nullable=False)
+    rating = db.Column(db.Float, nullable=False)
+
+# db.create_all()
 
 # Using google api to search
 def search_google(search_string, radius):
@@ -44,11 +57,16 @@ def search_google(search_string, radius):
     return response_list
 
 
-@app.route('/',methods=['GET','POST'])
+@app.route('/', methods=['GET', 'POST'])
 def home():
-    
+    if request.method == "POST":
+        keyword = request.form['search']
+        distance = request.form['distance']
+        response_list = search_google(keyword,distance)
+
+
     return(render_template('index.html'))
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     app.run(debug=True)

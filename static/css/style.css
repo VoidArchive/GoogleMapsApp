@@ -14,4 +14,12 @@ body {
 .form-control {
   width: 50vh;
   margin: 20px auto;
+  
+}
+
+#distance{
+    position: absolute;
+    width: 20vh;
+    right: 38%;
+    top: 23%;
 }
