@@ -1,15 +1,13 @@
-import random
 import time
-
 import api
 import googlemaps
-from flask import Flask, render_template, redirect, url_for, jsonify, request
+from flask import Flask, render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///search_list.db'
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:root@localhost:5432/SearchPlaces"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -17,6 +15,7 @@ db = SQLAlchemy(app)
 
 
 class SearchList(db.Model):
+    __tablename__ = 'places'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
     address = db.Column(db.String(250), nullable=False)
@@ -68,7 +67,7 @@ def search_google(search_string, radius):
 def home():
     if request.method == "POST":
 
-        # need to delete data in database before calling google api 
+        # need to delete data in database before calling google api
         db.session.query(SearchList).delete()
         keyword = request.form['search']
         distance = request.form['distance']
@@ -86,7 +85,8 @@ def home():
 
         return render_template('index.html', data_list=data_list)
 
-    return(render_template('index.html'))
+    return render_template('index.html')
+
 
 @app.route('/api_request')
 def api_request():
@@ -94,8 +94,12 @@ def api_request():
     if places:
         return jsonify(places.to_dict())
     else:
-        return jsonify(error={'Not found':'Database is empty'})
+        return jsonify(error={'Not found': 'Database is empty'})
+
+@app.route('/search')
+def search():
+    pass
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
